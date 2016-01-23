@@ -182,14 +182,13 @@ class Tooltip
                                         TooltipSettings::getApiHost() . '/' .
                                         TooltipSettings::getApiVersion() . '/thumbnail/' .
                                         TooltipSettings::getWidth() . '/' .
-                                        TooltipSettings::getEffect() . '/?url=" + url
-	                                }).css("border", "1px solid #ddd"));
+                                        TooltipSettings::getEffect() . '/?pk_campaign=tooltip&url=" + url
+	                                }));
                             return thumbnaildiv;
 	                    },
 		                position:
                         {
-			                at: "top center",
-			                my: "bottom center",
+			                ' . $this->getQtipPosition() . ',
 			                adjust: {
 			                    resize: true
 			                },
@@ -197,7 +196,7 @@ class Tooltip
 			                effect: false
 			            },
 			            style: {
-			                classes: "qtip-light qtip-shadow qtip-rounded"
+			                classes: "' . $this->getQtipStyle() . ' qtip-shadow qtip-rounded"
 			            },
 			            show: {
 			                event: event.type,
@@ -222,4 +221,84 @@ class Tooltip
 
 		return $out;
 	}
+
+
+    private function getQtipPosition() {
+        $result = null;
+
+        switch(TooltipSettings::getPosition()) {
+            case 'top':
+                $result = 'at: "top center", my: "bottom center"';
+                break;
+
+            case 'bottom':
+                $result = 'at: "bottom center", my: "top center"';
+                break;
+
+            case 'left':
+                $result = 'at: "center left", my: "center right"';
+                break;
+
+            case 'right':
+                $result = 'at: "center right", my: "center left"';
+                break;
+
+            default:
+                $result = 'at: "top center", my: "bottom center"';
+        }
+
+        return $result;
+    }
+
+
+    private function getQtipStyle() {
+        $result = null;
+
+        switch(TooltipSettings::getStyle()) {
+            case 'light':
+                $result = 'qtip-light';
+                break;
+
+            case 'dark':
+                $result = 'qtip-dark';
+                break;
+
+            case 'red':
+                $result = 'qtip-red';
+                break;
+
+            case 'blue':
+                $result = 'qtip-blue';
+                break;
+
+            case 'green':
+                $result = 'qtip-green';
+                break;
+
+            case 'youtube':
+                $result = 'qtip-youtube';
+                break;
+
+            case 'tipsy':
+                $result = 'qtip-tipsy';
+                break;
+
+            case 'bootstrap':
+                $result = 'qtip-bootstrap';
+                break;
+
+            case 'tipped':
+                $result = 'qtip-tipped';
+                break;
+
+            case 'jtools':
+                $result = 'qtip-jtools';
+                break;
+
+            default:
+                $result = 'qtip-dark';
+        }
+
+        return $result;
+    }
 }

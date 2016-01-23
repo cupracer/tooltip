@@ -23,6 +23,16 @@ namespace ThumbSniper\common;
 abstract class TooltipSettings
 {
     /** @var string */
+    static private $jqueryUrl = "https://code.jquery.com/jquery-1.12.0.min.js";
+    /** @var string */
+    static private $qtipCssUrl = "https://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css";
+    /** @var string */
+    static private $imagesLoadedUrl = "https://npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js";
+    /** @var string */
+    static private $qtipUrl = "https://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.js";
+
+
+    /** @var string */
     static private $apiHost = "api.thumbsniper.com";
     /** @var string */
     static private $apiVersion = "v3";
@@ -36,15 +46,11 @@ abstract class TooltipSettings
     static private $siteUrl;
     /** @var array */
     static private $excludes = array();
+    /** @var string */
+    static private $position = 'top';
+    /** @var string */
+    static private $style = 'jtools';
 
-    /** @var string */
-    static private $jqueryUrl = "https://code.jquery.com/jquery-1.12.0.min.js";
-    /** @var string */
-    static private $qtipCssUrl = "https://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css";
-    /** @var string */
-    static private $imagesLoadedUrl = "https://npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js";
-    /** @var string */
-    static private $qtipUrl = "https://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.js";
 
     /**
      * @return string
@@ -220,5 +226,37 @@ abstract class TooltipSettings
     public static function setJqueryUrl($jqueryUrl)
     {
         self::$jqueryUrl = $jqueryUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getPosition()
+    {
+        return self::$position;
+    }
+
+    /**
+     * @param string $position
+     */
+    public static function setPosition($position)
+    {
+        self::$position = $position;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getStyle()
+    {
+        return self::$style;
+    }
+
+    /**
+     * @param string $style
+     */
+    public static function setStyle($style)
+    {
+        self::$style = $style;
     }
 }
