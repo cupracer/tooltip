@@ -203,7 +203,7 @@ class Tooltip
 							solo: true,
 							ready: false,
 							effect: function() {
-                                $(this).fadeIn(500);
+                                jQuery(this).fadeIn(500);
                             }
 			            },
 			            events: {
