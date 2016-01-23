@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2015  Thomas Schulte <thomas@cupracer.de>
+ * Copyright (C) 2016  Thomas Schulte <thomas@cupracer.de>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
