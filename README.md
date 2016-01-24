@@ -24,7 +24,7 @@ $thumbsniper = new Tooltip();
     <title>Example</title>
     <?php
     echo $thumbsniper->getQtipCssHtmlTag();
-    echo $thumbsniper->getInlineCss();
+    echo $thumbsniper->getInlineCssHtmlTag();
     ?>
 </head>
 <body>
