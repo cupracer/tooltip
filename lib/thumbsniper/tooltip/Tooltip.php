@@ -130,8 +130,8 @@ class Tooltip
             jQuery(document).ready(function() { ' . '';
 
 		if(TooltipSettings::getPreview() == "all" || TooltipSettings::getPreview() == "external") {
-			$out.= 'for (var i = 0; i < document.links.length; ++i) {
-							var link = document.links[i];
+			$out.= 'jQuery("a").each(function() {
+							var link = this;
 							var blogurl = "' . TooltipSettings::getSiteUrl() . '";
 							var linkurl = String(link.href).substring(0, blogurl.length);
 							var linkproto = String(link.href).substring(0, 4);';
@@ -139,40 +139,41 @@ class Tooltip
 			$out.= 'if(linkproto == "http" || linkproto == "https") {';
 			$out.= 'var current_link = thumbsniper_rel_to_abs(link.href);';
 
-			if(is_array(TooltipSettings::getExcludes()) && sizeof(TooltipSettings::getExcludes()) > 0) {
+			if(is_array(TooltipSettings::getExcludes())) {
 				foreach(TooltipSettings::getExcludes() as $exclude) {
 					if($exclude == "") {
 						continue;
 					}
 
 					$out.= 'if((current_link.length == 0) || String(current_link).search(/^' . str_replace("/", "\\/", addslashes($exclude)) . '$/) != -1) {
-									link.className=link.className + " nothumbsniper ";
+									jQuery(link).removeClass("thumbsniper");
+									jQuery(link).addClass("nothumbsniper");
 								}';
 				}
 			}else {
 				$out.= 'if(current_link.length == 0) {
-							link.className=link.className + " nothumbsniper ";
+							jQuery(link).addClass("nothumbsniper");
 						}';
 			}
 
-			$out.= 'if(link.className.indexOf("nothumbsniper") == -1) {';
+			$out.= 'if(!jQuery(link).hasClass("nothumbsniper")) {';
 
 			if(TooltipSettings::getPreview() == 'external')
 			{
 				$out.= 'if(blogurl != linkurl) {
-							link.className=link.className + " thumbsniper ";
+							jQuery(link).addClass("thumbsniper");
 						}';
 			}else
 			{
-				$out.= 'link.className=link.className + " thumbsniper ";';
+				$out.= 'jQuery(link).addClass("thumbsniper");';
 			}
 			$out.= '}';
 			$out.= '}else {
-					link.className=link.className + " nothumbsniper "; }';
-			$out.= '};';
+					jQuery(link).addClass("nothumbsniper"); }';
+			$out.= '}';
 		}
 
-		$out.= '});</script>' . "\n";
+		$out.= ') })</script>' . "\n";
 
 		return $out;
 	}
