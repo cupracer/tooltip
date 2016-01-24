@@ -43,6 +43,17 @@ class Tooltip
     }
 
 
+    public function getInlineCss() {
+        $out = '<style type="text/css">
+            .qtip {
+                max-width: none;
+            }
+            </style>';
+
+        return $out;
+    }
+
+
 	public function getInlineScripts() {
 		$out = "\n<!-- ThumbSniper scripts - start -->\n";
 
@@ -205,6 +216,9 @@ class Tooltip
 							effect: function() {
                                 jQuery(this).fadeIn(500);
                             }
+			            },
+			            hide: {
+			                fixed: true
 			            },
 			            events: {
 			                render: function(event, api) {

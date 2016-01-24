@@ -22,27 +22,30 @@ $thumbsniper = new Tooltip();
 <html>
 <head>
     <title>Example</title>
-    <?php echo $thumbsniper->getQtipCssHtmlTag(); ?>
+    <?php
+    echo $thumbsniper->getQtipCssHtmlTag();
+    echo $thumbsniper->getInlineCss();
+    ?>
 </head>
 <body>
 <div style="margin-left: 400px; margin-top: 100px;">
-    <h2>external</h2>
+    <h2>Test 1: external</h2>
     <a href="http://www.google.de">Google</a><br>
     <a href="http://www.wikipedia.org">Wikipedia</a><br>
     <a href="http://www.apple.com">Apple</a><br>
 </div>
 <div style="margin-left: 400px">
-    <h2>internal</h2>
+    <h2>Test 2: internal</h2>
     <a href="<?php echo TooltipSettings::getSiteUrl(); ?>">SELF</a><br>
 </div>
 <div style="margin-left: 400px">
-    <h2>marked</h2>
+    <h2>Test 3: marked</h2>
     <a href="http://www.google.de" class="thumbsniper">Google</a><br>
     <a href="http://www.wikipedia.org" class="thumbsniper">Wikipedia</a><br>
     <a href="http://www.apple.com" class="thumbsniper">Apple</a><br>
 </div>
 <div style="margin-left: 400px">
-    <h2>excluded</h2>
+    <h2>Test 4: excluded</h2>
     <a href="http://www.google.de" class="nothumbsniper">Google</a><br>
     <a href="http://www.wikipedia.org" class="nothumbsniper">Wikipedia</a><br>
     <a href="http://www.apple.com" class="nothumbsniper">Apple</a><br>
