@@ -37,7 +37,7 @@ abstract class TooltipSettings
     /** @var string */
     static private $apiVersion = "v3";
     /** @var string */
-    static private $preview = "all";
+    static private $preview = "external";
     /** @var integer */
     static private $width = "182";
     /** @var string */
