@@ -44,11 +44,13 @@ class Tooltip
 
 
     public function getInlineCss() {
-        $out = '<style type="text/css">
-            .qtip {
-                max-width: none;
-            }
-            </style>';
+        $out = '.qtip { max-width: none; }';
+
+        return $out;
+    }
+
+    public function getInlineCssHtmlTag() {
+        $out = '<style type="text/css">' . $this->getInlineCss() . '</style>';
 
         return $out;
     }
