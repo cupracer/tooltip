@@ -220,9 +220,6 @@ class Tooltip
                                 jQuery(this).fadeIn(500);
                             }
 			            },
-			            hide: {
-			                fixed: true
-			            },
 			            events: {
 			                render: function(event, api) {
 			                    api.toggle(true);
