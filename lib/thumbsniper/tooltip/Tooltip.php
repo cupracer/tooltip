@@ -190,13 +190,14 @@ class Tooltip
 		                prerender: true,
 		                content: function() {
 		                    var thumbnaildiv = jQuery("<div/>", {}).css("padding", "6px");
+		                    var d = new Date();
 		                    jQuery(thumbnaildiv).append(
 		                        jQuery("<img />", {
 		                            src: document.location.protocol + "//' .
                                         TooltipSettings::getApiHost() . '/' .
                                         TooltipSettings::getApiVersion() . '/thumbnail/' .
                                         TooltipSettings::getWidth() . '/' .
-                                        TooltipSettings::getEffect() . '/?pk_campaign=tooltip&url=" + url
+                                        TooltipSettings::getEffect() . '/?_=" + d.getTime() + "&pk_campaign=tooltip&url=" + url
 	                                }));
                             return thumbnaildiv;
 	                    },
@@ -223,10 +224,7 @@ class Tooltip
 			            events: {
 			                render: function(event, api) {
 			                    api.toggle(true);
-			                },
-							hide: function(event, api) {
-								active = false;
-							}
+			                }
 						}
 			        });
 		        });
