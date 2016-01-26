@@ -170,10 +170,10 @@ class Tooltip
 			$out.= '}';
 			$out.= '}else {
 					jQuery(link).addClass("nothumbsniper"); }';
-			$out.= '}';
+			$out.= '})';
 		}
 
-		$out.= ') })</script>' . "\n";
+		$out.= ' })</script>' . "\n";
 
 		return $out;
 	}
@@ -184,7 +184,8 @@ class Tooltip
 			jQuery(document).ready(function() {
 				jQuery(document).on("mouseenter", ".thumbsniper", function(event) {
 		            var thumbsniper = jQuery(this);
-		            var url = encodeURIComponent(jQuery(this).attr("href"));
+		            var current_link = thumbsniper_rel_to_abs(jQuery(this).attr("href"));
+		            var url = encodeURIComponent(current_link);
 
 		            thumbsniper.qtip({
 		                prerender: true,
