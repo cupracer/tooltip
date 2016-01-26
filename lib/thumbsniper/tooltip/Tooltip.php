@@ -44,7 +44,8 @@ class Tooltip
 
 
     public function getInlineCss() {
-        $out = '.qtip { max-width: none; }';
+        $out = '.qtip { max-width: none; } ';
+        $out.= '.qtip-titlebar{ text-align: center; padding: 5px; } ';
 
         return $out;
     }
@@ -179,6 +180,21 @@ class Tooltip
 	}
 
 
+    private function getTitleInlineScript() {
+        if(TooltipSettings::isShowTitle()) {
+            return 'var title = jQuery(this).attr("title");
+                    if(jQuery(this).attr("title")) {
+                        var api = jQuery(this).qtip("api");
+                        imgTag.imagesLoaded( {api, title}, function() {
+                                api.set("content.title", title);
+                        });
+                    }';
+        }else {
+            return "";
+        }
+    }
+
+
 	private function getQtipCode() {
 		$out = '<script type="application/javascript">
 			jQuery(document).ready(function() {
@@ -190,17 +206,25 @@ class Tooltip
 		            thumbsniper.qtip({
 		                prerender: true,
 		                content: function() {
-		                    var thumbnaildiv = jQuery("<div/>", {}).css("padding", "6px");
+		                    var thumbnaildiv = jQuery("<div/>", {});
+		                    thumbnaildiv.css("padding", "6px");
+		                    thumbnaildiv.css("text-align", "center");
 		                    var d = new Date();
-		                    jQuery(thumbnaildiv).append(
-		                        jQuery("<img />", {
+
+		                    var imgTag = jQuery("<img />", {
 		                            src: document.location.protocol + "//' .
                                         TooltipSettings::getApiHost() . '/' .
                                         TooltipSettings::getApiVersion() . '/thumbnail/' .
                                         TooltipSettings::getWidth() . '/' .
                                         TooltipSettings::getEffect() . '/?_=" + d.getTime() + "&pk_campaign=tooltip&url=" + url
-	                                }));
-                            return thumbnaildiv;
+	                                });
+
+                            // using --> \' . \'\'; <-- is a workaround for PHPStorm code validation
+		                    jQuery(thumbnaildiv).append(imgTag);' . '';
+
+        $out.= $this->getTitleInlineScript();
+
+        $out.= ' return thumbnaildiv;
 	                    },
 		                position:
                         {
@@ -226,7 +250,11 @@ class Tooltip
 			                render: function(event, api) {
 			                    api.toggle(true);
 			                }
-						}
+//						},
+//						hide: {
+//                           fixed: true,
+//                           event: "click"
+                        }
 			        });
 		        });
 	        });

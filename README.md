@@ -13,7 +13,9 @@ TooltipSettings::setPreview("all");
 TooltipSettings::setWidth(182);
 TooltipSettings::setEffect("fade1");
 TooltipSettings::setPosition("top");
+TooltipSettings::setStyle('jtools');
 TooltipSettings::setSiteUrl((isset($_SERVER['HTTPS'])?'https':'http').'://' . $_SERVER['HTTP_HOST']);
+TooltipSettings::setShowTitle(true);
 
 $thumbsniper = new Tooltip();
 
@@ -56,6 +58,14 @@ $thumbsniper = new Tooltip();
     <a href="//www.google.de">Google</a><br>
     <a href="//www.wikipedia.org">Wikipedia</a><br>
     <a href="//www.apple.com">Apple</a><br>
+</div>
+
+<div style="margin-left: 400px">
+    <h2>Test 6: show title</h2>
+    <a href="http://www.google.de" title="This is Google">Google</a><br>
+    <a href="http://www.wikipedia.org" title="This is Wikipedia">Wikipedia</a><br>
+    <a href="http://www.apple.com" title="This is Apple">Apple</a><br>
+    <a href="http://www.apple.com" title="This is a very very very very very very very very very very very long title">Apple (long title)</a><br>
 </div>
 
 <?php

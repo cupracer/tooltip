@@ -50,6 +50,8 @@ abstract class TooltipSettings
     static private $position = 'top';
     /** @var string */
     static private $style = 'jtools';
+    // @var boolean */
+    static private $showTitle = false;
 
 
     /**
@@ -258,5 +260,21 @@ abstract class TooltipSettings
     public static function setStyle($style)
     {
         self::$style = $style;
+    }
+
+    /**
+     * @return boolean
+     */
+    public static function isShowTitle()
+    {
+        return self::$showTitle;
+    }
+
+    /**
+     * @param boolean $showTitle
+     */
+    public static function setShowTitle($showTitle)
+    {
+        self::$showTitle = $showTitle;
     }
 }
