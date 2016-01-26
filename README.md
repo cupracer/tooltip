@@ -9,7 +9,7 @@ use ThumbSniper\common\TooltipSettings;
 use ThumbSniper\tooltip\Tooltip;
 
 
-TooltipSettings::setPreview("marked");
+TooltipSettings::setPreview("all");
 TooltipSettings::setWidth(182);
 TooltipSettings::setEffect("fade1");
 TooltipSettings::setPosition("top");
@@ -49,6 +49,13 @@ $thumbsniper = new Tooltip();
     <a href="http://www.google.de" class="nothumbsniper">Google</a><br>
     <a href="http://www.wikipedia.org" class="nothumbsniper">Wikipedia</a><br>
     <a href="http://www.apple.com" class="nothumbsniper">Apple</a><br>
+</div>
+
+<div style="margin-left: 400px">
+    <h2>Test 5: protocol-relative</h2>
+    <a href="//www.google.de">Google</a><br>
+    <a href="//www.wikipedia.org">Wikipedia</a><br>
+    <a href="//www.apple.com">Apple</a><br>
 </div>
 
 <?php
