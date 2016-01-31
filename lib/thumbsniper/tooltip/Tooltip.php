@@ -202,30 +202,54 @@ class Tooltip
 		            var thumbsniper = jQuery(this);
 		            var current_link = thumbsniper_rel_to_abs(jQuery(this).attr("href"));
 		            var url = encodeURIComponent(current_link);
+                    var active = true;
 
 		            thumbsniper.qtip({
 		                prerender: true,
-		                content: function() {
-		                    var thumbnaildiv = jQuery("<div/>", {});
-		                    thumbnaildiv.css("padding", "6px");
-		                    thumbnaildiv.css("text-align", "center");
-		                    var d = new Date();
+	                    content: function(event, api) {
+	                        api.toggle(false);
+//                                while(active) {
+                                    $.ajax({
+                                        url: document.location.protocol + "//' .
+                                            TooltipSettings::getApiHost() . '/' .
+                                            TooltipSettings::getApiVersion() . '/thumbnail/' .
+                                            TooltipSettings::getWidth() . '/' .
+                                            TooltipSettings::getEffect() . '/?pk_campaign=tooltip",
+                                        jsonp: "callback",
+                                        dataType: "jsonp",
+                                        cache: true,
+                                        beforeSend: function(xhr, opts){
+                                             opts.url+= "&url=" + url;
+                                        }
+                                    })
+                                    .then(function(data) {
+                                        if(data.url != "wait") {
+                                            var thumbnaildiv = jQuery("<div/>", {});
+                                            thumbnaildiv.css("padding", "6px");
+                                            thumbnaildiv.css("text-align", "center");
 
-		                    var imgTag = jQuery("<img />", {
-		                            src: document.location.protocol + "//' .
-                                        TooltipSettings::getApiHost() . '/' .
-                                        TooltipSettings::getApiVersion() . '/thumbnail/' .
-                                        TooltipSettings::getWidth() . '/' .
-                                        TooltipSettings::getEffect() . '/?_=" + d.getTime() + "&pk_campaign=tooltip&url=" + url
-	                                });
+                                            var imgTag = jQuery("<img />", {
+                                                src: data.url
+                                            });
 
-                            // using --> \' . \'\'; <-- is a workaround for PHPStorm code validation
-		                    jQuery(thumbnaildiv).append(imgTag);' . '';
+                                            jQuery(thumbnaildiv) . append(imgTag);
 
-        $out.= $this->getTitleInlineScript();
+                                            imgTag.imagesLoaded( {api, thumbnaildiv}, function() {
+                                                //api.set("content.text", thumbnaildiv);
+                                            });
 
-        $out.= ' return thumbnaildiv;
-	                    },
+                                            active = false;
+                                            //return thumbnaildiv;
+                                        }else {
+                                            setTimeout(function() {}, 1000);
+                                        }
+                                    }, function(xhr, status, error) {
+                                        // Upon failure... set the tooltip content to the status and error value
+                                        //api.set("content.text", status + ": " + error);
+                                        active = false;
+                                    });
+//                                }
+                        },
 		                position:
                         {
 			                ' . $this->getQtipPosition() . ',
