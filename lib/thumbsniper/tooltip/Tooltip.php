@@ -207,7 +207,8 @@ class Tooltip
 		            thumbsniper.qtip({
 		                prerender: true,
 	                    content: function(event, api) {
-	                        api.toggle(false);
+	                            api.set("content.css", { display: "block", visibility: "false !important" });
+
 //                                while(active) {
                                     $.ajax({
                                         url: document.location.protocol + "//' .
@@ -222,7 +223,7 @@ class Tooltip
                                              opts.url+= "&url=" + url;
                                         }
                                     })
-                                    .then(function(data) {
+                                    .done(function(data) {
                                         if(data.url != "wait") {
                                             var thumbnaildiv = jQuery("<div/>", {});
                                             thumbnaildiv.css("padding", "6px");
@@ -235,13 +236,11 @@ class Tooltip
                                             jQuery(thumbnaildiv) . append(imgTag);
 
                                             imgTag.imagesLoaded( {api, thumbnaildiv}, function() {
-                                                //api.set("content.text", thumbnaildiv);
+                                                api.set("content.text", thumbnaildiv);
                                             });
 
                                             active = false;
                                             //return thumbnaildiv;
-                                        }else {
-                                            setTimeout(function() {}, 1000);
                                         }
                                     }, function(xhr, status, error) {
                                         // Upon failure... set the tooltip content to the status and error value
@@ -249,6 +248,7 @@ class Tooltip
                                         active = false;
                                     });
 //                                }
+                            return false;
                         },
 		                position:
                         {
