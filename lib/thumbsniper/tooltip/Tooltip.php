@@ -180,21 +180,6 @@ class Tooltip
 	}
 
 
-    private function getTitleInlineScript() {
-        if(TooltipSettings::isShowTitle()) {
-            return 'var title = jQuery(this).attr("title");
-                    if(jQuery(this).attr("title")) {
-                        var api = jQuery(this).qtip("api");
-                        imgTag.imagesLoaded( {api, title}, function() {
-                                api.set("content.title", title);
-                        });
-                    }';
-        }else {
-            return "";
-        }
-    }
-
-
 	private function getQtipCode() {
 		$out = '<script type="application/javascript">
 			jQuery(document).ready(function() {
@@ -202,54 +187,64 @@ class Tooltip
 		            var thumbsniper = jQuery(this);
 		            var current_link = thumbsniper_rel_to_abs(jQuery(this).attr("href"));
 		            var url = encodeURIComponent(current_link);
-                    var active = true;
+                    var reload = true;
+                    var showTitle = ' . (TooltipSettings::isShowTitle() ? "true" : "false") . ';
 
 		            thumbsniper.qtip({
 		                prerender: true,
-	                    content: function(event, api) {
-	                            api.set("content.css", { display: "block", visibility: "false !important" });
-
-//                                while(active) {
-                                    $.ajax({
-                                        url: document.location.protocol + "//' .
-                                            TooltipSettings::getApiHost() . '/' .
-                                            TooltipSettings::getApiVersion() . '/thumbnail/' .
-                                            TooltipSettings::getWidth() . '/' .
-                                            TooltipSettings::getEffect() . '/?pk_campaign=tooltip",
-                                        jsonp: "callback",
-                                        dataType: "jsonp",
-                                        cache: true,
-                                        beforeSend: function(xhr, opts){
-                                             opts.url+= "&url=" + url;
-                                        }
-                                    })
-                                    .done(function(data) {
-                                        if(data.url != "wait") {
-                                            var thumbnaildiv = jQuery("<div/>", {});
-                                            thumbnaildiv.css("padding", "6px");
-                                            thumbnaildiv.css("text-align", "center");
-
-                                            var imgTag = jQuery("<img />", {
-                                                src: data.url
-                                            });
-
-                                            jQuery(thumbnaildiv) . append(imgTag);
-
-                                            imgTag.imagesLoaded( {api, thumbnaildiv}, function() {
-                                                api.set("content.text", thumbnaildiv);
-                                            });
-
-                                            active = false;
-                                            //return thumbnaildiv;
-                                        }
-                                    }, function(xhr, status, error) {
-                                        // Upon failure... set the tooltip content to the status and error value
-                                        //api.set("content.text", status + ": " + error);
-                                        active = false;
+	                    content: {
+	                        text: function(event, api) {
+                              api.tooltip.css("visibility", "hidden");
+                              jQuery.ajax({
+                                  url: document.location.protocol + "//' .
+                                    TooltipSettings::getApiHost() . '/' .
+                                    TooltipSettings::getApiVersion() . '/thumbnail/' .
+                                    TooltipSettings::getWidth() . '/' .
+                                    TooltipSettings::getEffect() . '/?pk_campaign=tooltip",
+                                  jsonp: "callback",
+                                  dataType: "jsonp",
+                                  cache: true,
+                                  beforeSend: function(xhr, opts) {
+                                    opts.url += "&url=" + url;
+                                  }
+                                })
+                                .then(function(data) {
+                                  if (data.status == "dummy") {
+                                    if (reload == true) {
+                                      setTimeout(function() {
+                                        api.set("content.text", api.options.content.text);
+                                      }, 1000);
+                                    }
+                                  } else {
+                                    var thumbnaildiv = jQuery("<div/>", {});
+                                    thumbnaildiv.css("padding", "6px");
+                                    thumbnaildiv.css("text-align", "center");
+                                    var imgTag = jQuery("<img />", {
+                                        id: "tsimg",
+                                      src: data.url
                                     });
-//                                }
-                            return false;
-                        },
+                                    jQuery(thumbnaildiv).append(imgTag);
+                                    imgTag.imagesLoaded({
+                                      api,
+                                      thumbnaildiv
+                                    }, function() {
+                                      api.set("content.text", thumbnaildiv);
+                                    });
+                                  }
+                                }, function(xhr, status, error) {});
+                            },
+                            title: function(event, api) {
+                                if(showTitle) {
+                                    var title = jQuery(this).attr("title");
+                                    if(title) {
+                                        jQuery("#imgTag").imagesLoaded( {api, title}, function() {
+                                                api.set("content.title", title);
+                                        });
+                                    }
+                                }
+                                api.tooltip.css("visibility", "visible");
+                            }
+                       },
 		                position:
                         {
 			                ' . $this->getQtipPosition() . ',
