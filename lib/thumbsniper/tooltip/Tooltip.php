@@ -189,7 +189,7 @@ class Tooltip
 		            var url = encodeURIComponent(current_link);
                     var reload = true;
                     var showTitle = ' . (TooltipSettings::isShowTitle() ? "true" : "false") . ';
-                    var debug = true;
+                    var debug = false;
 
 		            thumbsniper.qtip({
 		                prerender: true,
