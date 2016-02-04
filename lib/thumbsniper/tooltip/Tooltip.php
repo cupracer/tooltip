@@ -191,61 +191,64 @@ class Tooltip
                     var showTitle = ' . (TooltipSettings::isShowTitle() ? "true" : "false") . ';
                     var debug = false;
 
+                    function getAjaxResult(url) {
+                        console.log("running getAjaxResult " + url);
+                        return jQuery.ajax({
+                      url: document.location.protocol + "//' .
+            TooltipSettings::getApiHost() . '/' .
+            TooltipSettings::getApiVersion() . '/thumbnail/' .
+            TooltipSettings::getWidth() . '/' .
+            TooltipSettings::getEffect() . '/",
+                      jsonp: "callback",
+                      dataType: "jsonp",
+                      cache: true,
+                      beforeSend: function(xhr, opts) {
+                        opts.url += "&url=" + url;
+                      }
+                    });
+            }
+
 		            thumbsniper.qtip({
 		                prerender: true,
 	                    content: function(event, api) {
-	                        debug ? console.log("generate content") : null;
                               api.tooltip.css("visibility", "hidden");
-                              jQuery.ajax({
-                                  url: document.location.protocol + "//' .
-                                    TooltipSettings::getApiHost() . '/' .
-                                    TooltipSettings::getApiVersion() . '/thumbnail/' .
-                                    TooltipSettings::getWidth() . '/' .
-                                    TooltipSettings::getEffect() . '/",
-                                  jsonp: "callback",
-                                  dataType: "jsonp",
-                                  cache: true,
-                                  beforeSend: function(xhr, opts) {
-                                    opts.url += "&url=" + url;
-                                  }
-                                })
-                                .then(function(data) {
-                                    debug ? console.log("retrieved ajax result") : null;
-                                  if (data.status == "dummy") {
-                                    if (reload == true) {
-                                        debug ? console.log("reload (got dummy)") : null;
-                                      setTimeout(function() {
-                                        api.set("content", api.options.content);
-                                      }, 1000);
-                                    }
-                                  } else {
-                                    debug ? console.log("build tooltip") : null;
+
+                              var promise = getAjaxResult(url);
+
+                              promise.then(function(data) {
+
                                     var thumbnaildiv = jQuery("<div/>", {});
                                     thumbnaildiv.css("padding", "6px");
                                     thumbnaildiv.css("text-align", "center");
-                                    var imgTag = jQuery("<img />", {
-                                      src: data.url
-                                    });
-                                    jQuery(thumbnaildiv).append(imgTag);
 
-                                    imgTag.imagesLoaded(function() {
-                                      debug ? console.log("thumbnail loaded") : null;
-                                      api.set("content.text", thumbnaildiv);
+                                    if((data.width && data.height) && data.status == "dummy") {
+                                        var imgDiv = jQuery("<div/>", {
+                                            width: data.width,
+                                            height: data.height
+                                        });
+                                    }else {
+                                        var imgDiv = jQuery("<img/>", {
+                                            width: data.width,
+                                            height: data.height,
+                                            src: data.url
+                                        });
+                                    }
 
-                                      if(showTitle) {
-                                        debug ? console.log("use title tag") : null;
-                                        var title = thumbsniper.attr("title");
-                                        if(title) {
-                                            api.set("content.title", title);
+                                    jQuery(thumbnaildiv).append(imgDiv);
+
+                                    imgDiv.imagesLoaded(function() {
+                                        api.set("content.text", thumbnaildiv);
+
+                                        if(showTitle) {
+                                            var title = thumbsniper.attr("title");
+                                            if(title) {
+                                                api.set("content.title", title);
+                                            }
                                         }
-                                      }
-                                      api.reposition(null, false);
-                                      debug ? console.log("show tooltip") : null;
-                                      api.tooltip.css("visibility", "visible");
-                                    });
-
-                                  }
-                                }, function(xhr, status, error) {});
+                                        api.reposition(null, false);
+                                        api.tooltip.css("visibility", "visible");
+                                    })
+                              });
                        },
 		                position:
                         {
