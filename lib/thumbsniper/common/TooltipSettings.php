@@ -27,7 +27,7 @@ abstract class TooltipSettings
     /** @var string */
     static private $qtipCssUrl = "https://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css";
     /** @var string */
-    static private $imagesLoadedUrl = "https://npmcdn.com/imagesloaded@4.1/imagesloaded.pkgd.min.js";
+    static private $imagesLoadedUrl = "https://unpkg.com/imagesloaded@4.1/imagesloaded.pkgd.min.js";
     /** @var string */
     static private $qtipUrl = "https://cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.js";
 
