@@ -189,7 +189,7 @@ class Tooltip
 		            var url = encodeURIComponent(current_link);
                     var reload = true;
                     var showTitle = ' . (TooltipSettings::isShowTitle() ? "true" : "false") . ';
-                    var debug = false;
+                    var debug = true;
 
 		            thumbsniper.qtip({
 		                prerender: true,
@@ -210,6 +210,11 @@ class Tooltip
                                   }
                                 })
                                 .then(function(data) {
+                                    api.tooltip.css("min-width", data.width);
+                                    api.tooltip.css("min-height", data.height);
+                                    debug ? console.log("width: " + data.width + ", height: " + data.height) : null;
+                                    api.tooltip.css("visibility", "visible");
+
                                     debug ? console.log("retrieved ajax result") : null;
                                   if (data.status == "dummy") {
                                     if (reload == true) {
