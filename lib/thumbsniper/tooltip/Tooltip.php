@@ -191,6 +191,32 @@ class Tooltip
                     var showTitle = ' . (TooltipSettings::isShowTitle() ? "true" : "false") . ';
                     var debug = true;
 
+                    function getAjaxResult(url) {
+                        console.log("running getAjaxResult " + url);
+                        return jQuery.ajax({
+                      url: document.location.protocol + "//' .
+            TooltipSettings::getApiHost() . '/' .
+            TooltipSettings::getApiVersion() . '/thumbnail/' .
+            TooltipSettings::getWidth() . '/' .
+            TooltipSettings::getEffect() . '/",
+                      jsonp: "callback",
+                      dataType: "jsonp",
+                      cache: true,
+                      beforeSend: function(xhr, opts) {
+                        opts.url += "&url=" + url;
+                      }
+                    });
+            }
+
+		            thumbsniper.qtip({
+		                prerender: true,
+	                    content: function(event, api) {
+                              api.tooltip.css("visibility", "hidden");
+
+                              var promise = getAjaxResult(url);
+
+                              promise.then(function(data) {
+
 		            thumbsniper.qtip({
 		                prerender: true,
 	                    content: function(event, api) {
@@ -228,29 +254,35 @@ class Tooltip
                                     var thumbnaildiv = jQuery("<div/>", {});
                                     thumbnaildiv.css("padding", "6px");
                                     thumbnaildiv.css("text-align", "center");
-                                    var imgTag = jQuery("<img />", {
-                                      src: data.url
-                                    });
-                                    jQuery(thumbnaildiv).append(imgTag);
 
-                                    imgTag.imagesLoaded(function() {
-                                      debug ? console.log("thumbnail loaded") : null;
-                                      api.set("content.text", thumbnaildiv);
+                                    if((data.width && data.height) && data.status == "dummy") {
+                                        var imgDiv = jQuery("<div/>", {
+                                            width: data.width,
+                                            height: data.height
+                                        });
+                                    }else {
+                                        var imgDiv = jQuery("<img/>", {
+                                            width: data.width,
+                                            height: data.height,
+                                            src: data.url
+                                        });
+                                    }
 
-                                      if(showTitle) {
-                                        debug ? console.log("use title tag") : null;
-                                        var title = thumbsniper.attr("title");
-                                        if(title) {
-                                            api.set("content.title", title);
+                                    jQuery(thumbnaildiv).append(imgDiv);
+
+                                    imgDiv.imagesLoaded(function() {
+                                        api.set("content.text", thumbnaildiv);
+
+                                        if(showTitle) {
+                                            var title = thumbsniper.attr("title");
+                                            if(title) {
+                                                api.set("content.title", title);
+                                            }
                                         }
-                                      }
-                                      api.reposition(null, false);
-                                      debug ? console.log("show tooltip") : null;
-                                      api.tooltip.css("visibility", "visible");
-                                    });
-
-                                  }
-                                }, function(xhr, status, error) {});
+                                        api.reposition(null, false);
+                                        api.tooltip.css("visibility", "visible");
+                                    })
+                              });
                        },
 		                position:
                         {
